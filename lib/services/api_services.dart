@@ -102,8 +102,11 @@ return {"status":"ok","data":body};
 
  createEmployee({first,last,salary,hiredate,deptId,pid,status,assigndate})async{
   try {
-    var query1 = """ INSERT INTO Employees ( FirstName, LastName, DepartmentID, Salary, HireDate) 
-VALUES ('$first', '$last', $deptId, $salary, '$hiredate'); """;
+    var query = """ SELECT MAX(employeeID)  FROM employees """;
+    var res0 = await DbConnection.db.writeData(query);
+    var id = int.parse(res0.toString())+1;
+    var query1 = """ INSERT INTO Employees (EmployeeID, FirstName, LastName, DepartmentID, Salary, HireDate) 
+VALUES ( $id, '$first', '$last', $deptId, $salary, '$hiredate'); """;
 log(query1);
 var res = await DbConnection.db.writeData(query1);
 log(res,name: "insert");
